@@ -103,6 +103,47 @@ pnpm gateway:watch
 
 Note: `pnpm openclaw ...` runs TypeScript directly (via `tsx`). `pnpm build` produces `dist/` for running via Node / the packaged `openclaw` binary.
 
+## SaaS Platform (Multi-tenant)
+
+Deploy OpenClaw as a multi-tenant SaaS service with PostgreSQL storage, per-tenant isolation, and a web dashboard.
+
+**Architecture:**
+- Gateway proxy pattern: OpenClaw runs as a "black box" engine
+- Agent-per-tenant isolation with shared OpenClaw instance
+- File-to-DB sync via chokidar File Watcher
+- JWT authentication (expandable to OAuth)
+
+```bash
+cd saas-platform
+
+# Install dependencies
+pnpm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with DATABASE_URL, JWT_SECRET, OPENCLAW_BASE_DIR
+
+# Start all services (PostgreSQL, OpenClaw, Sync Service, Platform)
+docker-compose up -d
+
+# Run database migrations
+pnpm db:migrate
+```
+
+**Services:**
+- **postgres** — PostgreSQL 16 database
+- **openclaw** — OpenClaw Gateway instance
+- **sync-service** — File watcher syncing OpenClaw files to DB
+- **platform** — Next.js 14 dashboard (port 3000)
+
+**Dashboard features:**
+- User registration/login with JWT auth
+- Channel configuration (Telegram, Discord, Slack, WhatsApp)
+- Session history with message viewer
+- Per-tenant settings management
+
+Design docs: [`docs/plans/2026-02-03-saas-platform-implementation.md`](docs/plans/2026-02-03-saas-platform-implementation.md)
+
 ## Security defaults (DM access)
 
 OpenClaw connects to real messaging surfaces. Treat inbound DMs as **untrusted input**.
