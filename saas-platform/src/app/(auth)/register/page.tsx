@@ -38,7 +38,7 @@ export default function RegisterPage() {
       }
 
       localStorage.setItem('token', data.token)
-      router.push('/')
+      router.push('/onboarding')
     } catch {
       setError('An error occurred')
     } finally {

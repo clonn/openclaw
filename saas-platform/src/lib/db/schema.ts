@@ -16,6 +16,31 @@ export const tenants = pgTable('tenants', {
   agentId: varchar('agent_id', { length: 100 }).notNull().unique(),
   displayName: varchar('display_name', { length: 255 }),
   status: varchar('status', { length: 20 }).default('active').notNull(),
+  onboardingStatus: jsonb('onboarding_status').$type<{
+    completed: boolean
+    currentStep: number
+    steps: {
+      welcome: boolean
+      apiKey: boolean
+      model: boolean
+      channelSelect: boolean
+      channelConfig: boolean
+      systemPrompt: boolean
+      tested: boolean
+    }
+  }>().default({
+    completed: false,
+    currentStep: 1,
+    steps: {
+      welcome: false,
+      apiKey: false,
+      model: false,
+      channelSelect: false,
+      channelConfig: false,
+      systemPrompt: false,
+      tested: false,
+    },
+  }),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 

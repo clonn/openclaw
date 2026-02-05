@@ -30,11 +30,24 @@ export async function register(email: string, password: string): Promise<AuthRes
       passwordHash,
     })
 
-    // Create tenant
+    // Create tenant with default onboarding status
     const [tenant] = await db.insert(tenants).values({
       userId,
       agentId: tenantId,
       displayName: email.split('@')[0],
+      onboardingStatus: {
+        completed: false,
+        currentStep: 1,
+        steps: {
+          welcome: false,
+          apiKey: false,
+          model: false,
+          channelSelect: false,
+          channelConfig: false,
+          systemPrompt: false,
+          tested: false,
+        },
+      },
     }).returning()
 
     // Get free plan

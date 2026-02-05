@@ -82,4 +82,19 @@ export class OpenClawCLI {
   async setToolEnabled(tool: string, enabled: boolean): Promise<void> {
     await this.setConfig(`tools.${tool}.enabled`, String(enabled))
   }
+
+  async sendMessage(message: string): Promise<string> {
+    // Use agent command to send message and get response
+    const escaped = message.replace(/"/g, '\\"')
+    return this.exec(`agent --message "${escaped}" --no-stream`)
+  }
+
+  async isInitialized(): Promise<boolean> {
+    try {
+      await fs.access(path.join(this.agentDir, 'openclaw.json'))
+      return true
+    } catch {
+      return false
+    }
+  }
 }
