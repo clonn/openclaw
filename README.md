@@ -142,7 +142,28 @@ pnpm db:migrate
 - Session history with message viewer
 - Per-tenant settings management
 
-Design docs: [`docs/plans/2026-02-03-saas-platform-implementation.md`](docs/plans/2026-02-03-saas-platform-implementation.md)
+**Onboarding Wizard:**
+
+New users are guided through an 8-step setup wizard:
+
+1. **Welcome** — Product overview and feature highlights
+2. **API Key** — Connect Anthropic or OpenAI with validation
+3. **Model** — Choose AI model (Claude Sonnet/Opus, GPT-4o, etc.)
+4. **Channel Select** — Pick a messaging channel (Telegram/Discord/Slack/WhatsApp)
+5. **Channel Config** — Enter bot credentials with validation
+6. **System Prompt** — Customize assistant personality
+7. **Test** — Send a test message via embedded WebChat
+8. **Complete** — Summary and dashboard access
+
+Key features:
+- Lazy agent initialization (created on first test message)
+- Dashboard locked until setup complete
+- Progress saved to database (can resume later)
+- Skip optional steps (API Key + Channel + Test required)
+
+Design docs:
+- [`docs/plans/2026-02-03-saas-platform-implementation.md`](docs/plans/2026-02-03-saas-platform-implementation.md)
+- [`docs/plans/2026-02-04-onboarding-wizard-design.md`](docs/plans/2026-02-04-onboarding-wizard-design.md)
 
 ## Security defaults (DM access)
 
